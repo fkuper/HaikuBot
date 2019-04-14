@@ -1,0 +1,10 @@
+.git/
+.vscode/
+node_modules/
+secrets/
+
+.dockerignore
+.gitignore
+auth.json
+Dockerfile
+README.md
