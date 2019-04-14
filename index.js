@@ -9,31 +9,41 @@ const reddit = new snoowrap({
   clientSecret: auth.redditApiToken.clientSecret,
   refreshToken: auth.redditApiToken.refreshToken
 })
+const Commands = {randomHaiku: '!haiku',
+                  topHaiku: '!haiku-top',
+                  help: '!haiku-help'};
+Object.freeze(Commands);
 
-
-// Gets called after the Discord Bot comes online
+// Emitted when the client becomes ready to start working.
 discordClient.on('ready', () => {
   console.log(`Logged in as ${discordClient.user.tag}!`);
 });
 
-// Gets called after a message is typed in the discord server
+// Emitted whenever a message is created.
 discordClient.on('message', msg => {
   switch (msg.content) {
-    case '!haiku':
+    case Commands.randomHaiku:
       getRandomSubmission('YoutubeHaiku')
         .then((submission) => {
           msg.reply(submission.url);
           msg.react('👌');
         });
       break;
-    case '!haiku-top':
+    case Commands.topHaiku:
       getRandomTopDailySubmission('YoutubeHaiku')
         .then((topPost) => {
           msg.reply(topPost.url);
+          msg.react('👌');
         });
+      break;
+    case Commands.help:
+      msg.author.send('henlo ugly');
       break;
   }
 });
+
+// Logs the client in, establishing a websocket connection to Discord.
+discordClient.login(auth.token);
 
 function getRandomTopDailySubmission(subreddit) {
   return reddit.getSubreddit(subreddit)
@@ -51,5 +61,3 @@ function getRandomSubmission(subreddit) {
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
-   
-discordClient.login(auth.token);
