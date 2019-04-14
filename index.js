@@ -9,10 +9,7 @@ const reddit = new snoowrap({
   clientSecret: auth.redditApiToken.clientSecret,
   refreshToken: auth.redditApiToken.refreshToken
 })
-const Commands = {randomHaiku: '!haiku',
-									topHaiku: '!haiku-top',
-									search: '!haiku-search',
-                  help: '!haiku-help'};
+const Commands = { randomHaiku: '!haiku', topHaiku: '!haiku-top', search: '!haiku-search', help: '!haiku-help' };
 Object.freeze(Commands);
 
 discordClient.login(auth.token);
@@ -23,9 +20,9 @@ discordClient.on('ready', () => {
 
 discordClient.on('message', msg => {
 
-	const args = msg.content.split(' ');
-	const command = args.shift().toLowerCase();
-	const joinedArgs = args.join(' ');
+  const args = msg.content.split(' ');
+  const command = args.shift().toLowerCase();
+  const joinedArgs = args.join(' ');
 
   switch (command) {
     case Commands.randomHaiku:
@@ -35,32 +32,32 @@ discordClient.on('message', msg => {
           msg.react('👌');
         });
       break;
-		case Commands.topHaiku:
-			if (args[0] === 'hour'  || args[0] === 'week' || args[0] === 'month' || args[0] === 'year' || args[0] === 'all') {
-				getRandomTopSubmission('YoutubeHaiku', args[0])
-        	.then((submission) => {
-         	  msg.reply(submission.url);
-        		msg.react('👌');
-       	  });
-			} else {
-				getRandomTopSubmission('YoutubeHaiku', 'day')
-					.then((submission) => {
-						msg.reply(submission.url);
-						msg.react('👌');
-					});
-			}
-			break;
-		case Commands.search:
-			searchSubredditAndGetRandomSubmission('YoutubeHaiku', joinedArgs)
-				.then((submission) => {
-					msg.reply(submission.url);
-					msg.react('👌');
-				});
-			break;
+    case Commands.topHaiku:
+      if (args[0] === 'hour' || args[0] === 'week' || args[0] === 'month' || args[0] === 'year' || args[0] === 'all') {
+        getRandomTopSubmission('YoutubeHaiku', args[0])
+          .then((submission) => {
+            msg.reply(submission.url);
+            msg.react('👌');
+          });
+      } else {
+        getRandomTopSubmission('YoutubeHaiku', 'day')
+          .then((submission) => {
+            msg.reply(submission.url);
+            msg.react('👌');
+          });
+      }
+      break;
+    case Commands.search:
+      searchSubredditAndGetRandomSubmission('YoutubeHaiku', joinedArgs)
+        .then((submission) => {
+          msg.reply(submission.url);
+          msg.react('👌');
+        });
+      break;
     case Commands.help:
       msg.author.send(helpText);
       break;
-  } 
+  }
 });
 
 function getRandomSubmission(subreddit) {
@@ -68,29 +65,29 @@ function getRandomSubmission(subreddit) {
 }
 
 function getRandomTopSubmission(subreddit, time) {
-	return reddit.getSubreddit(subreddit)
-		.getTop({time: time})
-		.then((topPosts) => {
-			const postIndex = getRandomInt(topPosts.length);
-			return topPosts[postIndex];
-		});
+  return reddit.getSubreddit(subreddit)
+    .getTop({ time: time })
+    .then((topPosts) => {
+      const postIndex = getRandomInt(topPosts.length);
+      return topPosts[postIndex];
+    });
 }
 
 function searchSubredditAndGetRandomSubmission(subreddit, searchString) {
-	return reddit.getSubreddit(subreddit)
-		.search({query: searchString})
-		.then((searchResults) => {
-			const postIndex = getRandomInt(searchResults.length);
-			return searchResults[postIndex];
-		});
+  return reddit.getSubreddit(subreddit)
+    .search({ query: searchString })
+    .then((searchResults) => {
+      const postIndex = getRandomInt(searchResults.length);
+      return searchResults[postIndex];
+    });
 }
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-const helpText = 
-`Hey there!
+const helpText =
+  `Hey there!
 
 This simple bot provides you with funny or interesting short videos from reddit.com/r/YoutubeHaiku.
 
