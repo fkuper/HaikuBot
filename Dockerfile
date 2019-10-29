@@ -7,5 +7,4 @@ RUN npm ci
 
 COPY . .
 
-RUN ls -la
 ENTRYPOINT [ "node", "./index.js" ]
