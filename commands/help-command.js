@@ -24,6 +24,9 @@ This will get you a random video out of the top videos of the day.
 '!haiku-top [time interval]':
 Get a random top video of the: 'week', 'month', 'year' or of 'all' time.
 
+'!haiku-text'
+This one will get you a written haiku poem from /r/haiku.
+
 '!haiku-help':
 Gets you this lovely help dialogue!
 \`\`\`
